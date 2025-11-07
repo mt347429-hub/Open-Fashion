@@ -6,13 +6,14 @@ import '../core/colors.dart';
 import '../core/custom_text.dart';
 
 class CartWidget extends StatefulWidget {
-  const CartWidget({super.key, required this.image, required this.name, required this.price, required this.descp, required this.onChanged});
+  const CartWidget({super.key, required this.image, required this.name, required this.price, required this.descp, required this.onChanged, required this.qty});
 
   final String image;
   final String name;
   final int price;
   final String descp;
   final Function(int) onChanged;
+  final int qty;
 
   @override
   State<CartWidget> createState() => _CartWidgetState();
@@ -20,7 +21,13 @@ class CartWidget extends StatefulWidget {
 
 class _CartWidgetState extends State<CartWidget> {
 
-  int quantity = 1;
+  late int quantity;
+  @override
+  void initState() {
+    quantity=1;
+    quantity=widget.qty;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:master_ui3/core/colors.dart';
 import 'package:master_ui3/core/custom_text.dart';
 import 'package:master_ui3/screens/add_address.dart';
+import 'package:master_ui3/screens/add_card.dart';
 import 'package:master_ui3/widgets/customer_appbar.dart';
 import 'package:master_ui3/widgets/header.dart';
 
+import '../widgets/cart_widget.dart';
 import '../widgets/custom_button.dart';
+import '../widgets/custom_diaolge.dart';
 
 class PlaceOrder extends StatefulWidget {
   const PlaceOrder({
@@ -29,9 +33,16 @@ class PlaceOrder extends StatefulWidget {
   State<PlaceOrder> createState() => _PlaceOrderState();
 }
 
-dynamic _savedAddress;
-
 class _PlaceOrderState extends State<PlaceOrder> {
+  ///address
+  late int selectedQty;
+  @override
+  void initState() {
+    selectedQty = widget.qty;
+    super.initState();
+  }
+
+  dynamic _savedAddress;
   void _editAddress() async {
     final newAddress = await Navigator.push(
       context,
@@ -55,27 +66,46 @@ class _PlaceOrderState extends State<PlaceOrder> {
     }
   }
 
+  ///card
+  dynamic _savedCard;
+  void _openCard() async {
+    final cardDate = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return AddCard();
+        },
+      ),
+    );
+    if (cardDate != null) {
+      setState(() {
+        _savedCard = cardDate;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomerAppbar(isblackk: false),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Header(title: "Checkout"),
-            CustomText(
-              text: "Shipping Address".toUpperCase(),
-              color: Colors.black38,
-              size: 20,
-            ),
-            Gap(15),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Header(title: "Checkout"),
+              _savedCard != null && _savedAddress != null
+                  ? SizedBox.shrink()
+                  : CustomText(
+                      text: "Shipping Address".toUpperCase(),
+                      color: Colors.black38,
+                      size: 20,
+                    ),
+              Gap(15),
 
-            ///Address flow
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
+              ///Address flow
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _savedAddress != null
@@ -88,7 +118,8 @@ class _PlaceOrderState extends State<PlaceOrder> {
                                 children: [
                                   CustomText(
                                     text:
-                                        "${_savedAddress["first"] + _savedAddress["last"]}"
+                                        "${_savedAddress['first']} ${_savedAddress['last']}"
+                                            .toUpperCase()
                                             .toUpperCase(),
                                     color: Colors.black,
                                     size: 20,
@@ -133,48 +164,112 @@ class _PlaceOrderState extends State<PlaceOrder> {
                       : SizedBox.shrink(),
                 ],
               ),
-            ),
-            Gap(40),
+              Gap(40),
 
-            ///Shipping method
-            CustomText(
-              text: "Shipping Method".toUpperCase(),
-              color: Colors.black38,
-              size: 14,
-            ),
-            Gap(10),
-            buildContainer("Pickup at Store", Icons.keyboard_arrow_down, true),
+              ///Shipping method
+              _savedCard != null && _savedAddress != null
+                  ? SizedBox.shrink()
+                  : CustomText(
+                      text: "Shipping Method".toUpperCase(),
+                      color: Colors.black38,
+                      size: 14,
+                    ),
+              Gap(10),
+              _savedCard != null && _savedAddress != null
+                  ? SizedBox.shrink()
+                  : buildContainer(
+                      "Pickup at Store",
+                      Icons.keyboard_arrow_down,
+                      true,
+                    ),
 
-            /// payment Method
-            Gap(40),
-            CustomText(
-              text: "Payment Method".toUpperCase(),
-              color: Colors.black38,
-              size: 14,
-            ),
-            Gap(10),
-            buildContainer(
-              "Select Payment Method",
-              Icons.keyboard_arrow_down,
-              false,
-            ),
-            Spacer(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                CustomText(text: "Total", color: AppColors.primary),
-                CustomText(
-                  text: "\$ ${widget.total}",
-                  color: Colors.red.shade200,
-                  size: 25,
-                ),
-              ],
-            ),
-            Gap(20),
-            Button(isSvgg: true, title: "Place Order", onTap: () {}),
+              /// payment Method
+              Gap(40),
+              _savedCard != null && _savedAddress != null
+                  ? SizedBox.shrink()
+                  : CustomText(
+                      text: "Payment Method".toUpperCase(),
+                      color: Colors.black38,
+                      size: 14,
+                    ),
+              Gap(10),
+              _savedCard != null
+                  ? Column(
+                      children: [
+                        Divider(color: Colors.grey.shade300),
+                        Gap(20),
+                        Row(
+                          children: [
+                            SvgPicture.asset(
+                              "assets/svgs/Mastercard.svg",
+                              width: 40,
+                            ),
+                            Gap(10),
+                            CustomText(
+                              text: "Master Card ending with",
+                              color: Colors.black,
+                            ),
+                            Gap(10),
+                            CustomText(
+                              text:
+                                  "••••${_savedCard['number'].toString().substring(_savedCard['number'].length - 2)}",
+                              color: Colors.black,
+                            ),
+                            Spacer(),
+                            Icon(Icons.keyboard_arrow_right),
+                          ],
+                        ),
+                        Divider(color: Colors.grey.shade300),
+                        Gap(20),
+                      ],
+                    )
+                  : GestureDetector(
+                      onTap: _openCard,
+                      child: buildContainer(
+                        "Select Payment Method",
+                        Icons.keyboard_arrow_down,
+                        false,
+                      ),
+                    ),
+              _savedCard != null && _savedAddress != null
+                  ? CartWidget(
+                      image: widget.image,
+                      name: widget.name,
+                      descp: widget.desp,
+                      price: widget.price,
+                      qty: widget.qty,
+                      onChanged: (qty) => setState(() => selectedQty = qty),
+                    )
+                  : SizedBox.shrink(),
 
-            Gap(70),
-          ],
+              Gap(220),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  CustomText(text: "Total", color: AppColors.primary),
+                  CustomText(
+                    text: "\$ ${widget.total}",
+                    color: Colors.red.shade200,
+                    size: 25,
+                  ),
+                ],
+              ),
+              Gap(20),
+              Button(isSvgg: true, title: "Place Order", onTap: () {
+                showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (context) {
+                      return Dialog(
+                        child: CustomDailog(),
+                      );
+                    }
+                );
+
+
+              }),
+            ],
+          ),
         ),
       ),
     );

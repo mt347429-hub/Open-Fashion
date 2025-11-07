@@ -48,7 +48,7 @@ class _CheckOutState extends State<CheckOut> {
                 setState(() {
                   sQuantity=v;
                 });
-              } ,
+              }, qty: sQuantity ,
             ),
             promo(),
             Spacer(),
