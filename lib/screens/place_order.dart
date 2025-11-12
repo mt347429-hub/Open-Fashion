@@ -34,7 +34,6 @@ class PlaceOrder extends StatefulWidget {
 }
 
 class _PlaceOrderState extends State<PlaceOrder> {
-
   late int selectedQty;
   dynamic _savedCard;
   dynamic _savedAddress;
@@ -43,7 +42,6 @@ class _PlaceOrderState extends State<PlaceOrder> {
     selectedQty = widget.qty;
     super.initState();
   }
-
 
   /// edit address
   void _editAddress() async {
@@ -88,12 +86,14 @@ class _PlaceOrderState extends State<PlaceOrder> {
   }
 
   /// edit card
-  void _editCard() async{
-   final newCard= await Navigator.push(context, MaterialPageRoute(builder: (context) => AddCard(date: _savedCard,),));
-   setState(() {
-     _savedCard= newCard;
-   });
-
+  void _editCard() async {
+    final newCard = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => AddCard(date: _savedCard)),
+    );
+    setState(() {
+      _savedCard = newCard;
+    });
   }
 
   @override
@@ -153,16 +153,18 @@ class _PlaceOrderState extends State<PlaceOrder> {
                                   Row(
                                     children: [
                                       CustomText(
-                                        text: _savedAddress["state"].toUpperCase(),
+                                        text: _savedAddress["state"]
+                                            .toUpperCase(),
                                         color: Colors.black54,
                                         size: 14,
                                       ),
                                       Gap(10),
-                                      CustomText(text: "${_savedAddress["Zip"]}"
-                                          .toUpperCase(),
+                                      CustomText(
+                                        text: "${_savedAddress["Zip"]}"
+                                            .toUpperCase(),
                                         color: Colors.black54,
                                         size: 14,
-                                      )
+                                      ),
                                     ],
                                   ),
                                   Gap(10),
@@ -246,7 +248,8 @@ class _PlaceOrderState extends State<PlaceOrder> {
                             Spacer(),
                             GestureDetector(
                               onTap: _editCard,
-                                child: Icon(Icons.keyboard_arrow_right)),
+                              child: Icon(Icons.keyboard_arrow_right),
+                            ),
                           ],
                         ),
                         Divider(color: Colors.grey.shade300),
@@ -278,26 +281,28 @@ class _PlaceOrderState extends State<PlaceOrder> {
                 children: [
                   CustomText(text: "Total", color: AppColors.primary),
                   CustomText(
-                    text: "\$ ${widget.total*selectedQty}",
+                    text: "\$ ${widget.total * selectedQty}",
                     color: Colors.red.shade200,
                     size: 25,
                   ),
                 ],
               ),
               Gap(20),
-              _savedCard != null && _savedAddress != null ?Button(isSvgg: true, title: "Place Order", onTap: () {
-                showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (context) {
-                      return Dialog(
-                        child: CustomDailog(),
-                      );
-                    }
-                );
-
-
-              }):SizedBox.shrink(),
+              _savedCard != null && _savedAddress != null
+                  ? Button(
+                      isSvgg: true,
+                      title: "Place Order",
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (context) {
+                            return Dialog(child: CustomDailog());
+                          },
+                        );
+                      },
+                    )
+                  : SizedBox.shrink(),
             ],
           ),
         ),
