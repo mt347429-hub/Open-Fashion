@@ -6,14 +6,21 @@ import '../core/colors.dart';
 import '../core/custom_text.dart';
 
 class CartWidget extends StatefulWidget {
-  const CartWidget({super.key, required this.image, required this.name, required this.price, required this.descp, required this.onChanged, required this.qty});
+  const CartWidget({
+    super.key,
+    required this.image,
+    required this.name,
+    required this.price,
+    required this.descp,
+    required this.onChanged,
+    required this.qty,
+  });
 
   final String image;
   final String name;
   final int price;
   final String descp;
   final Function(int) onChanged;
-
   /// important
   final int qty;
 
@@ -22,12 +29,11 @@ class CartWidget extends StatefulWidget {
 }
 
 class _CartWidgetState extends State<CartWidget> {
-
   late int number;
   @override
   void initState() {
-    number=1;
-    number=widget.qty;
+    number = 1;
+    number = widget.qty;
     super.initState();
   }
 
@@ -87,7 +93,11 @@ class _CartWidgetState extends State<CartWidget> {
               ],
             ),
             Gap(15),
-            CustomText(text: "\$ ${widget.price}", color: Colors.red.shade200, size: 25),
+            CustomText(
+              text: "\$ ${widget.price}",
+              color: Colors.red.shade200,
+              size: 25,
+            ),
           ],
         ),
       ],
@@ -108,5 +118,3 @@ GestureDetector buildGestureDetector(onTap, svg) {
     ),
   );
 }
-
-

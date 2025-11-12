@@ -278,7 +278,7 @@ class _PlaceOrderState extends State<PlaceOrder> {
                 children: [
                   CustomText(text: "Total", color: AppColors.primary),
                   CustomText(
-                    text: "\$ ${widget.total}",
+                    text: "\$ ${widget.total*selectedQty}",
                     color: Colors.red.shade200,
                     size: 25,
                   ),
