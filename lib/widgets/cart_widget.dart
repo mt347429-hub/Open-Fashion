@@ -13,6 +13,8 @@ class CartWidget extends StatefulWidget {
   final int price;
   final String descp;
   final Function(int) onChanged;
+
+  /// important
   final int qty;
 
   @override
@@ -21,11 +23,11 @@ class CartWidget extends StatefulWidget {
 
 class _CartWidgetState extends State<CartWidget> {
 
-  late int quantity;
+  late int number;
   @override
   void initState() {
-    quantity=1;
-    quantity=widget.qty;
+    number=1;
+    number=widget.qty;
     super.initState();
   }
 
@@ -60,17 +62,17 @@ class _CartWidgetState extends State<CartWidget> {
               children: [
                 buildGestureDetector(() {
                   setState(() {
-                    if (quantity > 1) {
+                    if (number > 1) {
                       setState(() {
-                        quantity--;
-                        widget.onChanged(quantity);
+                        number--;
+                        widget.onChanged(number);
                       });
                     }
                   });
                 }, "assets/svgs/min.svg"),
                 Gap(12),
                 CustomText(
-                  text: "$quantity",
+                  text: "$number",
                   spacing: 4,
                   color: AppColors.primary,
                   weight: FontWeight.bold,
@@ -78,8 +80,8 @@ class _CartWidgetState extends State<CartWidget> {
                 Gap(12),
                 buildGestureDetector(() {
                   setState(() {
-                    quantity++;
-                    widget.onChanged(quantity);
+                    number++;
+                    widget.onChanged(number);
                   });
                 }, "assets/svgs/plus.svg"),
               ],

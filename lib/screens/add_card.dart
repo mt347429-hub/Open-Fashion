@@ -7,7 +7,9 @@ import 'package:master_ui3/widgets/header.dart';
 import '../widgets/custom_button.dart';
 
 class AddCard extends StatefulWidget {
-  const AddCard({super.key});
+  const AddCard({super.key,  this.date});
+
+  final dynamic date;
 
   @override
   State<AddCard> createState() => _AddCardState();
@@ -20,6 +22,18 @@ class _AddCardState extends State<AddCard> {
   String cvvCode = "";
   bool isShow = false;
   final _key = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    if(widget.date!=null){
+      cardNumber = widget.date["number"] ?? "";
+      expiryDate = widget.date["date"] ?? "";
+      cardHolderName = widget.date["name"] ?? "";
+      cvvCode = widget.date["cvv"] ?? "";
+
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

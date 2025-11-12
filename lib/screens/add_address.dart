@@ -3,7 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:master_ui3/widgets/customer_appbar.dart';
 import 'package:master_ui3/widgets/header.dart';
 import '../widgets/custom_button.dart';
-import '../widgets/customer_text_field.dart';
+import '../widgets/custom_text_field.dart';
 
 class AddAddress extends StatefulWidget {
   const AddAddress({super.key, this.date});
@@ -168,8 +168,9 @@ class _AddAddressState extends State<AddAddress> {
                           'first': firstNameController.text,
                           'last': lastNameController.text,
                           'address': addressController.text,
-                          'Zip': zipCodeController.text,
                           'city': cityController.text,
+                          'state': stateController.text,
+                          'Zip': zipCodeController.text,
                           'phone': phoneController.text,
                         };
                         Navigator.pop(context, data);

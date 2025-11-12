@@ -34,15 +34,18 @@ class PlaceOrder extends StatefulWidget {
 }
 
 class _PlaceOrderState extends State<PlaceOrder> {
-  ///address
+
   late int selectedQty;
+  dynamic _savedCard;
+  dynamic _savedAddress;
   @override
   void initState() {
     selectedQty = widget.qty;
     super.initState();
   }
 
-  dynamic _savedAddress;
+
+  /// edit address
   void _editAddress() async {
     final newAddress = await Navigator.push(
       context,
@@ -54,6 +57,7 @@ class _PlaceOrderState extends State<PlaceOrder> {
     });
   }
 
+  ///address
   void _openAddress() async {
     final addressDate = await Navigator.push(
       context,
@@ -67,7 +71,6 @@ class _PlaceOrderState extends State<PlaceOrder> {
   }
 
   ///card
-  dynamic _savedCard;
   void _openCard() async {
     final cardDate = await Navigator.push(
       context,
@@ -82,6 +85,15 @@ class _PlaceOrderState extends State<PlaceOrder> {
         _savedCard = cardDate;
       });
     }
+  }
+
+  /// edit card
+  void _editCard() async{
+   final newCard= await Navigator.push(context, MaterialPageRoute(builder: (context) => AddCard(date: _savedCard,),));
+   setState(() {
+     _savedCard= newCard;
+   });
+
   }
 
   @override
@@ -136,6 +148,22 @@ class _PlaceOrderState extends State<PlaceOrder> {
                                     text: _savedAddress["city"].toUpperCase(),
                                     color: Colors.black54,
                                     size: 14,
+                                  ),
+                                  Gap(10),
+                                  Row(
+                                    children: [
+                                      CustomText(
+                                        text: _savedAddress["state"].toUpperCase(),
+                                        color: Colors.black54,
+                                        size: 14,
+                                      ),
+                                      Gap(10),
+                                      CustomText(text: "${_savedAddress["Zip"]}"
+                                          .toUpperCase(),
+                                        color: Colors.black54,
+                                        size: 14,
+                                      )
+                                    ],
                                   ),
                                   Gap(10),
                                   CustomText(
@@ -216,7 +244,9 @@ class _PlaceOrderState extends State<PlaceOrder> {
                               color: Colors.black,
                             ),
                             Spacer(),
-                            Icon(Icons.keyboard_arrow_right),
+                            GestureDetector(
+                              onTap: _editCard,
+                                child: Icon(Icons.keyboard_arrow_right)),
                           ],
                         ),
                         Divider(color: Colors.grey.shade300),
@@ -242,7 +272,7 @@ class _PlaceOrderState extends State<PlaceOrder> {
                     )
                   : SizedBox.shrink(),
 
-              Gap(220),
+              Gap(80),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -255,7 +285,7 @@ class _PlaceOrderState extends State<PlaceOrder> {
                 ],
               ),
               Gap(20),
-              Button(isSvgg: true, title: "Place Order", onTap: () {
+              _savedCard != null && _savedAddress != null ?Button(isSvgg: true, title: "Place Order", onTap: () {
                 showDialog(
                     context: context,
                     barrierDismissible: false,
@@ -267,7 +297,7 @@ class _PlaceOrderState extends State<PlaceOrder> {
                 );
 
 
-              }),
+              }):SizedBox.shrink(),
             ],
           ),
         ),
